@@ -1,6 +1,6 @@
 
 import java.awt.Color;
-
+import java.text.DecimalFormat;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -41,7 +41,7 @@ public class AnnuityCalculatorFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        frequencyCbIn = new javax.swing.JComboBox<String>();
+        frequencyCbIn = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         save = new javax.swing.JRadioButton();
         pay = new javax.swing.JRadioButton();
@@ -76,15 +76,15 @@ public class AnnuityCalculatorFrame extends javax.swing.JFrame {
         jLabel1.setText("Annuity Calculator");
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel2.setText("Interest");
+        jLabel2.setText("Interest rate per year (%)");
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel3.setText("Future value/Loan");
+        jLabel3.setText("Future value/Loan ($)");
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel4.setText("Duration in years");
+        jLabel4.setText("Duration (yrs)");
 
-        frequencyCbIn.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--------------------", "Weekly", "Monthly", "Quaterly", "Semiyearly", "Yearly", " " }));
+        frequencyCbIn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--------------------", "Weekly", "Monthly", "Quaterly", "Semiyearly", "Yearly" }));
         frequencyCbIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 frequencyCbInActionPerformed(evt);
@@ -116,7 +116,7 @@ public class AnnuityCalculatorFrame extends javax.swing.JFrame {
         });
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel9.setText("Regular payment");
+        jLabel9.setText("Regular payment ($)");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -250,14 +250,8 @@ public class AnnuityCalculatorFrame extends javax.swing.JFrame {
 
     private void CalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CalculateActionPerformed
         int a=0; //determine if the user entered only 4 of the data
-        
-        
-        double i=Double.parseDouble(interest.getText());
-        int n=Integer.parseInt(regular.getText());
-        double p=Double.parseDouble(pv.getText());
-        double r=Double.parseDouble(regular.getText());
-        
-        
+        int f=0; //frequency -- Weekly=52 Monthly=12 Quaterly=4 Semiyearly=2 Yearly=1
+        DecimalFormat d = new DecimalFormat("###.##");
         
         if(interest.getText().isEmpty()==false)
         {
@@ -274,6 +268,24 @@ public class AnnuityCalculatorFrame extends javax.swing.JFrame {
         if(frequencyCbIn.getSelectedIndex()!=0)
         {
             a++;
+            switch(frequencyCbIn.getSelectedIndex()) //determine the value of frequency
+            {
+                case 1:
+                    f=52;
+                    break;
+                case 2:
+                    f=12;
+                    break;
+                case 3:
+                    f=4;
+                    break;
+                case 4:
+                    f=2;
+                    break;
+                case 5:
+                    f=1;
+                    break;
+            }
         }
         if(regular.getText().isEmpty()==false)
         {
@@ -282,66 +294,143 @@ public class AnnuityCalculatorFrame extends javax.swing.JFrame {
         
         //----------------------------------------------------------------------
         
-        if(a==4)
+        if(a==4) //if only 4 boxes are entered
         {
+            
+//                double i=Double.parseDouble(interest.getText())/100/f;
+//                int n=Integer.parseInt(duration.getText())*f;
+//                double p=Double.parseDouble(pv.getText());
+//                double r=Double.parseDouble(regular.getText());
+            
             if(save.isSelected()==true)
             {
+                
                 if(interest.getText().isEmpty()==true)
                 {
-                    promptLabel.setText("Interest calculated!");
-                    promptLabel.setForeground(Color.green);
+                    promptLabel.setText("Sorry, can't calculate interest.");
+                    promptLabel.setForeground(Color.red);
                 }
                 if(pv.getText().isEmpty()==true)
                 {
                     double FV;
+                    
                     promptLabel.setText("Future value calculated!");
                     promptLabel.setForeground(Color.green);
                     
+                    double i=Double.parseDouble(interest.getText());
+                    i=i/100/f;
+                    double n=Double.parseDouble(duration.getText())*f;
+                    double r=Double.parseDouble(regular.getText());
+
+                    
+                    FV=r*((Math.pow(1+i,n)-1)/i);
+                    
+                    pv.setText(d.format(FV));
                     
                 }
                 if(duration.getText().isEmpty()==true)
                 {
+                    double n;
+                    
                     promptLabel.setText("Duration calculated!");
                     promptLabel.setForeground(Color.green);
-                }
-                if(frequencyCbIn.getSelectedIndex()==0)
-                {
-                    promptLabel.setText("Frequency can't be calculated!");
-                    promptLabel.setForeground(Color.red);
+                    
+                    double i=Double.parseDouble(interest.getText())/100/f;
+                    double p=Double.parseDouble(pv.getText());
+                    double r=Double.parseDouble(regular.getText());
+                    
+                    
+                    n=Math.log(p*i/r+1)/(Math.log(1+i)*f);
+                    
+                    duration.setText(d.format(n));
+                    
                 }
                 if(regular.getText().isEmpty()==true)
                 {
+                    double r=0;
+                    
                     promptLabel.setText("Regular payment calculated");
                     promptLabel.setForeground(Color.green);
+                    
+                    double i=Double.parseDouble(interest.getText())/100/f;
+                    int n=Integer.parseInt(duration.getText())*f;
+                    double p=Double.parseDouble(pv.getText());
+
+                    
+                    r=p*i/(Math.pow(1+i,n)-1);
+                    
+                    regular.setText(d.format(r));
                 }
-            }
-            else if(pay.isSelected()==true)//---------------------------------------
-            {
-                if(interest.getText().isEmpty()==true)
+                if(frequencyCbIn.getSelectedIndex()==0)
                 {
-                    promptLabel.setText("Interest calculated!");
-                    promptLabel.setForeground(Color.green);
+                    promptLabel.setText("Sorry, can't calculate frequency.");
+                    promptLabel.setForeground(Color.red);
+                }
+                
+            }
+            else if(pay.isSelected()==true)//----------------------------------------------------------------------------
+            {
+                
+                if(interest.getText().isEmpty()==true)
+                { 
+                    promptLabel.setText("Sorry, can't calculate interest.");
+                    promptLabel.setForeground(Color.red);
+                    
                 }
                 if(pv.getText().isEmpty()==true)
                 {
+                    double PV=0;
+                    
                     promptLabel.setText("Loan calculated!");
                     promptLabel.setForeground(Color.green);
+                    
+                    double i=Double.parseDouble(interest.getText())/100/f;
+                    int n=Integer.parseInt(duration.getText())*f;
+                    double r=Double.parseDouble(regular.getText());
+                    
+                    
+                    PV=r*(1-Math.pow(1+i, -n))/i;
+                    
+                    pv.setText(d.format(PV));
                 }
                 if(duration.getText().isEmpty()==true)
                 {
+                    double n=0;
+                    
                     promptLabel.setText("Duration calculated!");
                     promptLabel.setForeground(Color.green);
+                    
+                    double i=Double.parseDouble(interest.getText())/100/f;
+                    double p=Double.parseDouble(pv.getText());
+                    double r=Double.parseDouble(regular.getText());
+                    
+                    
+                    n=-(Math.log(1-p*i/r)/(Math.log(1+i)*f)); 
+                    
+                    duration.setText(d.format(n));
                 }
                 if(frequencyCbIn.getSelectedIndex()==0)
                 {
-                    promptLabel.setText("Frequency can't be calculated!");
+                    promptLabel.setText("Sorry, can't calculate frequency.");
                     promptLabel.setForeground(Color.red);
                 }
                 if(regular.getText().isEmpty()==true)
                 {
+                    double r=0;
+                    
                     promptLabel.setText("Regular payment calculated!");
                     promptLabel.setForeground(Color.green);
+                    
+                    double i=Double.parseDouble(interest.getText())/100/f;
+                    int n=Integer.parseInt(duration.getText())*f;
+                    double p=Double.parseDouble(pv.getText());
+
+                    
+                    r=p*i/(1-Math.pow(1+i, -n));
+                    
+                    regular.setText(d.format(r));
                 }
+                
             }
             else
             {
