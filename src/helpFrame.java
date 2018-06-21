@@ -1,19 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-//package AnnuityCalculator;
 
-/**
- *
- * @author 尹小姐
- */
+
+
 public class helpFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form helpFrame
-     */
     public helpFrame() {
         initComponents();
     }
@@ -39,7 +28,7 @@ public class helpFrame extends javax.swing.JFrame {
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jTextArea1.setRows(5);
-        jTextArea1.setText("ANNUITY CALCULATOR GUIDE:\n\n\tAn annuity is a series of payments made at equal\nintervals. Examples of annuities are regular deposits to a \nsavings account, monthly home mortgage payments, monthly \ninsurance payments and pension payments. Annuities can be \nclassified by the frequency of payment dates. The payments \n(deposits) may be made weekly, monthly, quarterly, yearly, or at \nany other regular interval of time.\n\n*********************************Warning**************************************\n\tThis program can only be used for calculating \nORDINARY-SIMPLE annuity, which means the frequency that\nyou deposit money and the frequency that the money compounds\nare the same, and they all hapend at the end of 1 round.\n**********************************************************************************\n\nSimple-ordinary example: putting money into the account weekly \n\t                   and the money compounds weekly.\nNon simple-ordinary example: putting money weekly but the\n                                               money compounds daily.\n\n\n\n\n\nFor paying loans, if the loan or interest rateis too high or if the \nregular payment or frequency is too low, the output in the \n\"duration\" box might not be a number, because the speed that\nthe loan grows exceed the speed that you pay.\n\nFor example, if the loan is 50,000 and interest rate is 12%, \npay and compounds yearly, and the regular payment is 500,\nthe interest every year will be 6000, but you only pay 500 each\nyear, so you will never be able to pay off this loan.");
+        jTextArea1.setText("ANNUITY CALCULATOR GUIDE:\n\n\tAn annuity is a series of payments made at equal\nintervals. Examples of annuities are regular deposits to a \nsavings account, monthly home mortgage payments, monthly \ninsurance payments and pension payments. Annuities can be \nclassified by the frequency of payment dates. The payments \n(deposits) may be made weekly, monthly, quarterly, yearly, or at \nany other regular interval of time.\n\n*********************************Warning**************************************\n\tThis program can only be used for calculating \nORDINARY-SIMPLE annuity, which means the frequency that\nyou deposit money and the frequency that the money compounds\nare the same, and they all hapend at the end of 1 round.\n\n\tNo decimals in duration box!\n**********************************************************************************\n\nSimple-ordinary example: putting money into the account weekly \n\t                   and the money compounds weekly.\nNon simple-ordinary example: putting money weekly but the\n                                               money compounds daily.\n\n\n\n\n\nFor paying loans, if the loan or interest rateis too high or if the \nregular payment or frequency is too low, the output in the \n\"duration\" box might not be a number, because the speed that\nthe loan grows exceed the speed that you pay.\n\nFor example, if the loan is 50,000 and interest rate is 12%, \npay and compounds yearly, and the regular payment is 500,\nthe interest every year will be 6000, but you only pay 500 each\nyear, so you will never be able to pay off this loan.");
         jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -104,9 +93,6 @@ public class helpFrame extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
