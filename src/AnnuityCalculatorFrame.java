@@ -1,22 +1,20 @@
+/*Jiayin Xie ICS3U Jun 21
+    This program can help people to calculate the data about annuities.
 
+*/
 import java.awt.Color;
 import java.text.DecimalFormat;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-//package AnnuityCalculator;
 
-/**
- *
- * @author 尹小姐
- */
+
 public class AnnuityCalculatorFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form AnnuityCalculatorFrame
      */
+    DecimalFormat d = new DecimalFormat("###.##");
+    int a; //determine if the user entered only 4 of the data
+    int f=0; //frequency -- Weekly=52 Monthly=12 Quaterly=4 Semiyearly=2 Yearly=1
+    
     public AnnuityCalculatorFrame() {
         initComponents();
     }
@@ -247,11 +245,10 @@ public class AnnuityCalculatorFrame extends javax.swing.JFrame {
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_saveActionPerformed
-
-    private void CalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CalculateActionPerformed
-        int a=0; //determine if the user entered only 4 of the data
-        int f=0; //frequency -- Weekly=52 Monthly=12 Quaterly=4 Semiyearly=2 Yearly=1
-        DecimalFormat d = new DecimalFormat("###.##");
+    
+    public int findEnteredNumber(){
+        
+        a=0;
         
         if(interest.getText().isEmpty()==false)
         {
@@ -291,80 +288,150 @@ public class AnnuityCalculatorFrame extends javax.swing.JFrame {
         {
             a++;
         }
-        
-        //----------------------------------------------------------------------
-        
-        if(a==4) //if only 4 boxes are entered
-        {
+        return a;
+    }
+    
+        private void calculateInterestSaving(){
             
-//                double i=Double.parseDouble(interest.getText())/100/f;
-//                int n=Integer.parseInt(duration.getText())*f;
-//                double p=Double.parseDouble(pv.getText());
-//                double r=Double.parseDouble(regular.getText());
-            
-            if(save.isSelected()==true)
-            {
+            promptLabel.setText("Sorry, can't calculate interest.");
+            promptLabel.setForeground(Color.red);
                 
+        }
+        private void calculatePvSaving(){
+            
+            double FV;
+                    
+            promptLabel.setText("Future value calculated!");
+            promptLabel.setForeground(Color.green);
+                    
+            double i=Double.parseDouble(interest.getText());
+            i=i/100/f;
+            double n=Double.parseDouble(duration.getText())*f;
+            double r=Double.parseDouble(regular.getText());
+
+                    
+            FV=r*((Math.pow(1+i,n)-1)/i);
+                    
+            pv.setText(d.format(FV));
+                    
+                
+        }
+        private void calculateLoanPaying(){
+            
+            double PV=0;
+                    
+            promptLabel.setText("Loan calculated!");
+            promptLabel.setForeground(Color.green);
+                    
+            double i=Double.parseDouble(interest.getText())/100/f;
+            int n=Integer.parseInt(duration.getText())*f;
+            double r=Double.parseDouble(regular.getText());
+                    
+                    
+            PV=r*(1-Math.pow(1+i, -n))/i;
+                    
+            pv.setText(d.format(PV));
+                    
+                
+        }
+        private void calculateDurationSaving(){
+            double n;
+                    
+            promptLabel.setText("Duration calculated!");
+            promptLabel.setForeground(Color.green);
+                    
+            double i=Double.parseDouble(interest.getText())/100/f;
+            double p=Double.parseDouble(pv.getText());
+            double r=Double.parseDouble(regular.getText());
+                    
+                    
+            n=Math.log(p*i/r+1)/(Math.log(1+i)*f);
+                    
+            duration.setText(d.format(n));
+                    
+                
+        }
+        private void calculateDurationPaying(){
+            double n=0;
+                    
+            promptLabel.setText("Duration calculated!");
+            promptLabel.setForeground(Color.green);
+                    
+            double i=Double.parseDouble(interest.getText())/100/f;
+            double p=Double.parseDouble(pv.getText());
+            double r=Double.parseDouble(regular.getText());
+                    
+                    
+            n=-(Math.log(1-p*i/r)/(Math.log(1+i)*f)); 
+                    
+            duration.setText(d.format(n));
+                
+        }
+        private void calculateRegularSaving(){
+            
+            double r=0;
+                    
+            promptLabel.setText("Regular payment calculated");
+            promptLabel.setForeground(Color.green);
+                    
+            double i=Double.parseDouble(interest.getText())/100/f;
+            int n=Integer.parseInt(duration.getText())*f;
+            double p=Double.parseDouble(pv.getText());
+
+                    
+            r=p*i/(Math.pow(1+i,n)-1);
+                    
+            regular.setText(d.format(r));
+                
+        }
+        private void calculateRegularPaying(){
+            double r=0;
+                    
+            promptLabel.setText("Regular payment calculated!");
+            promptLabel.setForeground(Color.green);
+                    
+            double i=Double.parseDouble(interest.getText())/100/f;
+            int n=Integer.parseInt(duration.getText())*f;
+            double p=Double.parseDouble(pv.getText());
+
+                    
+            r=p*i/(1-Math.pow(1+i, -n));
+                    
+            regular.setText(d.format(r));
+                
+        }
+        private void calculateFrequencySaving(){
+            promptLabel.setText("Sorry, can't calculate frequency.");
+            promptLabel.setForeground(Color.red);
+        }
+//----------------------------------------------------------------------------------------------------------------------
+    private void CalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CalculateActionPerformed
+        int num=findEnteredNumber();
+//----------------------------------------------------------------------------------------------------------------------
+        
+        if(num==4) //if only 4 boxes are entered
+        {
+            if(save.isSelected()==true) 
+            {
                 if(interest.getText().isEmpty()==true)
                 {
-                    promptLabel.setText("Sorry, can't calculate interest.");
-                    promptLabel.setForeground(Color.red);
+                    calculateInterestSaving();
                 }
                 if(pv.getText().isEmpty()==true)
                 {
-                    double FV;
-                    
-                    promptLabel.setText("Future value calculated!");
-                    promptLabel.setForeground(Color.green);
-                    
-                    double i=Double.parseDouble(interest.getText());
-                    i=i/100/f;
-                    double n=Double.parseDouble(duration.getText())*f;
-                    double r=Double.parseDouble(regular.getText());
-
-                    
-                    FV=r*((Math.pow(1+i,n)-1)/i);
-                    
-                    pv.setText(d.format(FV));
-                    
+                    calculatePvSaving();
                 }
                 if(duration.getText().isEmpty()==true)
                 {
-                    double n;
-                    
-                    promptLabel.setText("Duration calculated!");
-                    promptLabel.setForeground(Color.green);
-                    
-                    double i=Double.parseDouble(interest.getText())/100/f;
-                    double p=Double.parseDouble(pv.getText());
-                    double r=Double.parseDouble(regular.getText());
-                    
-                    
-                    n=Math.log(p*i/r+1)/(Math.log(1+i)*f);
-                    
-                    duration.setText(d.format(n));
-                    
+                    calculateDurationSaving();
                 }
                 if(regular.getText().isEmpty()==true)
                 {
-                    double r=0;
-                    
-                    promptLabel.setText("Regular payment calculated");
-                    promptLabel.setForeground(Color.green);
-                    
-                    double i=Double.parseDouble(interest.getText())/100/f;
-                    int n=Integer.parseInt(duration.getText())*f;
-                    double p=Double.parseDouble(pv.getText());
-
-                    
-                    r=p*i/(Math.pow(1+i,n)-1);
-                    
-                    regular.setText(d.format(r));
+                    calculateRegularSaving();
                 }
                 if(frequencyCbIn.getSelectedIndex()==0)
                 {
-                    promptLabel.setText("Sorry, can't calculate frequency.");
-                    promptLabel.setForeground(Color.red);
+                    calculateFrequencySaving();
                 }
                 
             }
@@ -373,62 +440,23 @@ public class AnnuityCalculatorFrame extends javax.swing.JFrame {
                 
                 if(interest.getText().isEmpty()==true)
                 { 
-                    promptLabel.setText("Sorry, can't calculate interest.");
-                    promptLabel.setForeground(Color.red);
-                    
+                    calculateInterestSaving();
                 }
                 if(pv.getText().isEmpty()==true)
                 {
-                    double PV=0;
-                    
-                    promptLabel.setText("Loan calculated!");
-                    promptLabel.setForeground(Color.green);
-                    
-                    double i=Double.parseDouble(interest.getText())/100/f;
-                    int n=Integer.parseInt(duration.getText())*f;
-                    double r=Double.parseDouble(regular.getText());
-                    
-                    
-                    PV=r*(1-Math.pow(1+i, -n))/i;
-                    
-                    pv.setText(d.format(PV));
+                    calculateLoanPaying();
                 }
                 if(duration.getText().isEmpty()==true)
                 {
-                    double n=0;
-                    
-                    promptLabel.setText("Duration calculated!");
-                    promptLabel.setForeground(Color.green);
-                    
-                    double i=Double.parseDouble(interest.getText())/100/f;
-                    double p=Double.parseDouble(pv.getText());
-                    double r=Double.parseDouble(regular.getText());
-                    
-                    
-                    n=-(Math.log(1-p*i/r)/(Math.log(1+i)*f)); 
-                    
-                    duration.setText(d.format(n));
+                    calculateDurationPaying();
                 }
                 if(frequencyCbIn.getSelectedIndex()==0)
                 {
-                    promptLabel.setText("Sorry, can't calculate frequency.");
-                    promptLabel.setForeground(Color.red);
+                    calculateFrequencySaving();
                 }
                 if(regular.getText().isEmpty()==true)
                 {
-                    double r=0;
-                    
-                    promptLabel.setText("Regular payment calculated!");
-                    promptLabel.setForeground(Color.green);
-                    
-                    double i=Double.parseDouble(interest.getText())/100/f;
-                    int n=Integer.parseInt(duration.getText())*f;
-                    double p=Double.parseDouble(pv.getText());
-
-                    
-                    r=p*i/(1-Math.pow(1+i, -n));
-                    
-                    regular.setText(d.format(r));
+                    calculateRegularPaying();
                 }
                 
             }
